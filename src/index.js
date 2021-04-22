@@ -25,9 +25,13 @@ const theme = createMuiTheme({
             hover: "#ffffff"
         },
         background: {
-            paper: "#1f6521"
+            paper: "#1f6521",
+            default: "#53900f"
         },
-        type: "dark"
+        type: "dark",
+    },
+    shape: {
+        borderRadius: 2
     }
 });
 

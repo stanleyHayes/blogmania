@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, CardContent, CardMedia, Divider, makeStyles, Typography} from "@material-ui/core";
+import {Box, Card, CardContent, CardMedia, Divider, makeStyles, Typography} from "@material-ui/core";
 
 const Post = ({post}) => {
 
@@ -11,13 +11,20 @@ const Post = ({post}) => {
             },
             card: {
                 transition: `all 300ms ease-out`,
-                height: 600,
+                height: 500,
                 '&:hover': {
                     transform: 'scale(1.1)',
                     background: theme.palette.primary.main
+                },
+                [theme.breakpoints.down('md')]: {
+                    height: 550,
                 }
             },
-            image: {},
+            image: {
+                height: 250,
+                objectPosition: "top",
+                objectFit: "cover"
+            },
             source: {
                 background: theme.palette.secondary.main,
                 fontWeight: "bold",
@@ -29,11 +36,24 @@ const Post = ({post}) => {
                 color: "white"
             },
             title: {},
-            description: {}
+            description: {},
+            content: {
+                display: "flex",
+                flexDirection: "column",
+                height: '100%'
+            },
+            descriptionContainer: {
+                flexGrow: 1,
+                justifySelf: "flex-end"
+            }
         }
     });
 
     const classes = useStyles();
+
+    const getWordsCount = (words, count) => {
+        return words.split(' ').slice(0, count).join(' ');
+    }
 
     return (
         <Card className={classes.card} variant="elevation" elevation={0}>
@@ -42,29 +62,36 @@ const Post = ({post}) => {
                 component="img"
                 src={post.image}
             />
-            <CardContent>
-                <Typography
-                    noWrap={true}
-                    gutterBottom={true}
-                    display="inline"
-                    variant="overline"
-                    className={classes.source}>
-                    {post.source.name}
-                </Typography>
-                <Typography
-                    display="inline"
-                    gutterBottom={true}
-                    variant="body2">
-                    {new Date(post.publishedAt).toDateString()}
-                </Typography>
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
-                <Typography className={classes.title} variant="h6">{post.title}</Typography>
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
-                <Typography className={classes.description} variant="body2">{post.description}</Typography>
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
-                <Typography inputMode="url" variant="button">
-                    <a className={classes.link} href={post.url}>View Post</a>
-                </Typography>
+            <CardContent className={classes.content}>
+                <Box>
+                    <Typography
+                        align="left"
+                        gutterBottom={true}
+                        display="inline"
+                        variant="overline"
+                        className={classes.source}>
+                        {post.source.name}
+                    </Typography>
+                    <Typography
+                        align="left"
+                        display="inline"
+                        gutterBottom={true}
+                        variant="body2">
+                        {new Date(post.publishedAt).toDateString()}
+                    </Typography>
+                    <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                </Box>
+                <Box>
+                    <Typography align="left" className={classes.title} variant="h6">
+                        {getWordsCount(post.title, 5)}
+                    </Typography>
+                    <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                </Box>
+                <Box className={classes.descriptionContainer}>
+                    <Typography align="left" className={classes.description} variant="body1">
+                        {getWordsCount(post.description, 20)}
+                    </Typography>
+                </Box>
             </CardContent>
         </Card>
     )

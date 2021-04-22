@@ -2,6 +2,7 @@ import React from "react";
 import {AppBar, Hidden, makeStyles} from "@material-ui/core";
 import MobileHeader from "./mobile-header";
 import DesktopHeader from "./desktop-header";
+import TabletHeader from "./tablet-header";
 
 
 const Header = () => {
@@ -9,8 +10,8 @@ const Header = () => {
     const useStyles = makeStyles(theme => {
         return {
             appBar: {
-                paddingTop: 16,
-                paddingBottom: 16
+                paddingTop: 8,
+                paddingBottom: 8
             }
         }
     });
@@ -22,8 +23,11 @@ const Header = () => {
             <Hidden mdDown={true}>
                 <DesktopHeader />
             </Hidden>
-            <Hidden lgUp={true}>
+            <Hidden mdUp={true}>
                 <MobileHeader />
+            </Hidden>
+            <Hidden only={['xs', 'sm', 'lg', 'xl']}>
+                <TabletHeader />
             </Hidden>
         </AppBar>
     )

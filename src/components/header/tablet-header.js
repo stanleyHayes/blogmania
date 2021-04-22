@@ -1,6 +1,6 @@
 import React from "react";
-import {Avatar, Fab, Grid, makeStyles, Toolbar, Typography} from "@material-ui/core";
-import {GoogleLogout} from "react-google-login";
+import {Avatar, Button, Grid, makeStyles, Toolbar, Typography} from "@material-ui/core";
+import GoogleLogin, {GoogleLogout} from "react-google-login";
 import {useDispatch, useSelector} from "react-redux";
 import {
     selectSignedIn,
@@ -8,14 +8,19 @@ import {
     setSignedIn,
     setUserData
 } from "../../features/user-slice";
-import {ExitToApp} from "@material-ui/icons";
 
-const MobileHeader = () => {
+const TabletHeader = () => {
 
     const dispatch = useDispatch();
 
     const isSignedIn = useSelector(selectSignedIn);
     const userData = useSelector(selectUserData);
+
+
+    const login = (response) => {
+        dispatch(setSignedIn(true));
+        dispatch(setUserData(response.profileObj))
+    }
 
     const logout = () => {
         dispatch(setSignedIn(false));
@@ -49,19 +54,19 @@ const MobileHeader = () => {
     const classes = useStyles();
 
     return (
-        <Toolbar variant="regular">
-            <Grid container={true} alignItems="center" justify="space-between" spacing={2}>
-                <Grid xs={4} item={true} container={true} justify="flex-start">
+        <Toolbar>
+            <Grid container={true} alignItems="center" justify="space-between">
+                <Grid md={6} spacing={2} item={true} container={true} justify="flex-start">
                     <Grid item={true}>
-                        <img src="/assets/books.svg" alt="" title="" width={30} height={30}/>
+                        <img src="/assets/books.svg" alt="" title="" width={50} height={50}/>
                     </Grid>
                     <Grid item={true}>
-                        <Typography className={classes.brand} display="inline" variant="h5">BM</Typography>
+                        <Typography className={classes.brand} display="inline" variant="h4">BlogMania</Typography>
                     </Grid>
                 </Grid>
 
                 {isSignedIn ? (
-                    <Grid item={true} xs={8} container={true} spacing={2} alignItems="center" justify="flex-end">
+                    <Grid md={6} container={true} spacing={2} alignItems="center" justify="flex-end">
                         <Grid item={true}>
                             {userData && userData.imageUrl ?
                                 <Avatar
@@ -80,21 +85,23 @@ const MobileHeader = () => {
                             }
                         </Grid>
                         <Grid item={true}>
+                            <Typography display="inline" variant="h6">{userData?.givenName}</Typography>
+                        </Grid>
+                        <Grid item={true}>
                             <GoogleLogout
                                 clientId="1075183749424-154bc74pas8dnjbpat4a19ff2tj10ss3.apps.googleusercontent.com"
                                 render={(renderProps) => {
                                     return (
-                                        <Fab
-                                            variant="round"
+                                        <Button
+                                            variant="contained"
                                             color="secondary"
                                             size="medium"
                                             className={classes.button}
                                             disableElevation={true}
                                             onClick={renderProps.onClick}
                                             disabled={renderProps.disabled}>
-                                            <ExitToApp/>
-                                        </Fab>
-
+                                            Logout
+                                        </Button>
                                     )
                                 }}
                                 onLogoutSuccess={logout}
@@ -105,11 +112,34 @@ const MobileHeader = () => {
                         </Grid>
                     </Grid>
                 ) : (
-                    <Grid item={true} xs={8} container={true} spacing={2} alignItems="center" justify="flex-end">
+                    <Grid md={6} container={true} spacing={2} alignItems="center" justify="flex-end">
                         <Grid item={true}>
                             <Avatar className={classes.avatar} variant="circular" color="secondary">
                                 S
                             </Avatar>
+                        </Grid>
+                        <Grid item={true}>
+                            <GoogleLogin
+                                clientId="1075183749424-154bc74pas8dnjbpat4a19ff2tj10ss3.apps.googleusercontent.com"
+                                render={(renderProps) => {
+                                    return (
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            size="medium"
+                                            className={classes.button}
+                                            disableElevation={true}
+                                            onClick={renderProps.onClick}
+                                            disabled={renderProps.disabled}>
+                                            Login
+                                        </Button>
+                                    )
+                                }}
+                                onSuccess={login}
+                                onFailure={login}
+                                isSignedIn={true}
+                                cookiePolicy={"single_host_origin"}
+                            />
                         </Grid>
                     </Grid>
                 )}
@@ -118,4 +148,4 @@ const MobileHeader = () => {
     )
 }
 
-export default MobileHeader;
+export default TabletHeader;

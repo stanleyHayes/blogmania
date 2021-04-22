@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Avatar, Button, Grid, TextField, Toolbar, Typography} from "@material-ui/core";
+import {Avatar, Button, Grid, makeStyles, TextField, Toolbar, Typography} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {
     selectSignedIn,
@@ -10,7 +10,6 @@ import {
     setUserData
 } from "../../features/user-slice";
 import GoogleLogin, {GoogleLogout} from "react-google-login";
-import {ExitToApp} from "@material-ui/icons";
 import {getPosts} from "../../features/blog-slice";
 
 const DesktopHeader = () => {
@@ -22,7 +21,6 @@ const DesktopHeader = () => {
     const searchInput = useSelector(selectUserInput);
 
     const [input, setInput] = useState(searchInput);
-
 
     const login = (response) => {
         dispatch(setSignedIn(true));
@@ -43,26 +41,51 @@ const DesktopHeader = () => {
         }
     }
 
+    const useStyles = makeStyles(theme => {
+        return {
+            textField: {
+                background: 'rgba(83,144,15,0.3)'
+            },
+            button: {
+                borderWidth: 2,
+                borderColor: "white",
+                borderStyle: "solid"
+            },
+            brand: {
+                fontWeight: "bold"
+            },
+            avatar: {
+                borderWidth: 2,
+                borderColor: "white",
+                borderStyle: "solid",
+                background: "white",
+                fontWeight: "bold"
+            }
+        }
+    });
+
+    const classes = useStyles();
 
     return (
         <Toolbar variant="regular">
-            <Grid container={true} alignItems="center" justify="space-between" spacing={5}>
-                <Grid item={true} lg={3} spacing={2} container={true} alignItems="center">
+            <Grid container={true} alignItems="center" justify="space-between" spacing={2}>
+                <Grid item={true} lg={3} spacing={2} container={true} alignItems="flex-start">
                     <Grid item={true}>
                         <img src="/assets/books.svg" alt="" title="" width={50} height={50}/>
                     </Grid>
                     <Grid item={true}>
-                        <Typography display="inline" variant="h3">BlogMania</Typography>
+                        <Typography className={classes.brand} display="inline" variant="h4">BlogMania</Typography>
                     </Grid>
                 </Grid>
                 {isSignedIn ? (
-                    <Grid item={true} lg={7} spacing={2} container={true} justify="space-around" alignItems="center">
+                    <Grid item={true} lg={6} spacing={2} container={true} justify="space-around" alignItems="center">
                         <Grid item={true} lg={10}>
                             <TextField
                                 color="secondary"
                                 label="Search"
                                 placeholder="Search"
                                 value={input}
+                                className={classes.textField}
                                 onChange={e => setInput(e.target.value)}
                                 fullWidth={true}
                                 variant="outlined"
@@ -72,25 +95,28 @@ const DesktopHeader = () => {
                         <Grid item={true} lg={2}>
                             <Button
                                 color="secondary"
-                                variant="outlined"
+                                variant="contained"
                                 disableElevation={true}
                                 fullWidth={true}
+                                className={classes.button}
                                 size="medium"
                                 onClick={handleSearchClick}>Search</Button>
                         </Grid>
                     </Grid>
                 ) : null}
-                <Grid item={true} lg={2} container={true} alignItems="center">
+                <Grid item={true} lg={3} container={true} alignItems="center">
                     {isSignedIn ? (
                         <Grid container={true} spacing={2} alignItems="center" justify="flex-end">
                             <Grid item={true}>
                                 {userData && userData.imageUrl ?
                                     <Avatar
+                                        className={classes.button}
                                         alt={userData.name}
                                         title={userData.name}
                                         src={userData?.imageUrl}
                                         variant="circular"/> :
                                     <Avatar
+                                        className={classes.button}
                                         variant="circular"
                                         alt={userData?.name}
                                         title={userData?.name}>
@@ -107,9 +133,10 @@ const DesktopHeader = () => {
                                     render={(renderProps) => {
                                         return (
                                             <Button
-                                                variant="outlined"
+                                                variant="contained"
                                                 color="secondary"
                                                 size="medium"
+                                                className={classes.button}
                                                 disableElevation={true}
                                                 onClick={renderProps.onClick}
                                                 disabled={renderProps.disabled}>
@@ -119,7 +146,6 @@ const DesktopHeader = () => {
                                     }}
                                     onLogoutSuccess={logout}
                                     onFailure={logout}
-                                    icon={<ExitToApp/>}
                                     isSignedIn={false}
                                     cookiePolicy={"single_host_origin"}
                                 />
@@ -128,7 +154,7 @@ const DesktopHeader = () => {
                     ) : (
                         <Grid container={true} spacing={2} alignItems="center" justify="flex-end">
                             <Grid item={true}>
-                                <Avatar variant="circular" color="secondary">
+                                <Avatar className={classes.avatar} variant="circular" color="secondary">
                                     S
                                 </Avatar>
                             </Grid>
@@ -138,13 +164,13 @@ const DesktopHeader = () => {
                                     render={(renderProps) => {
                                         return (
                                             <Button
-                                                variant="outlined"
+                                                variant="contained"
                                                 color="secondary"
                                                 size="medium"
+                                                className={classes.button}
                                                 disableElevation={true}
                                                 onClick={renderProps.onClick}
-                                                disabled={renderProps.disabled}
-                                                className="login__button">
+                                                disabled={renderProps.disabled}>
                                                 Login
                                             </Button>
                                         )

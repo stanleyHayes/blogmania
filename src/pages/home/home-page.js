@@ -1,8 +1,18 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import GoogleLogin from "react-google-login";
 import {useSelector, useDispatch} from "react-redux";
-import {selectSignedIn, selectUserInput, setSignedIn, setUserData} from "../../features/user-slice";
-import {Button, Container, Typography, Box, makeStyles} from "@material-ui/core";
+import {selectSignedIn, selectUserInput, setSearchInput, setSignedIn, setUserData} from "../../features/user-slice";
+import {
+    Button,
+    Container,
+    Typography,
+    Box,
+    makeStyles,
+    Grid,
+    TextField,
+    Divider,
+    useMediaQuery
+} from "@material-ui/core";
 import Layout from "../../components/layout";
 import Blogs from "../../components/shared/blogs";
 import {getPosts, selectLoading, selectPosts} from "../../features/blog-slice";
@@ -17,18 +27,18 @@ const HomePage = () => {
     }
 
     const isSignedIn = useSelector(selectSignedIn);
-    const input = useSelector(selectUserInput);
     const posts = useSelector(selectPosts);
     const loading = useSelector(selectLoading);
+
+    const searchInput = useSelector(selectUserInput);
+
+    const [input, setInput] = useState(searchInput);
 
     const useStyles = makeStyles(theme => {
         return {
             container: {
                 paddingTop: 100,
                 paddingBottom: 16
-            },
-            button: {
-
             },
             logo: {
                 marginBottom: 16,
@@ -46,9 +56,24 @@ const HomePage = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center"
+            },
+            divider: {
+                marginTop: 16,
+                marginBottom: 16
+            },
+            textField: {
+                zIndex: 1,
+                background: 'rgba(31,38,5,0.2)',
+                overflow: "hidden"
+            },
+            button: {
+                borderWidth: 2,
+                borderColor: "white",
+                borderStyle: "solid"
             }
         }
     });
+
 
     const classes = useStyles();
 
@@ -58,10 +83,20 @@ const HomePage = () => {
         }
     }, [dispatch, input, isSignedIn]);
 
+    const mobile = useMediaQuery('(max-width: 1280px)');
+
+    const handleSearchClick = e => {
+        e.preventDefault();
+        if (input !== "") {
+            dispatch(setSearchInput(input));
+            dispatch(getPosts(input));
+        }
+    }
+
     return (
         <Layout>
             <Container
-                className={classes.container}
+                className={classes.noAuthContainer}
                 style={{display: isSignedIn ? "none" : null}}>
                 {
                     !isSignedIn ? (
@@ -73,8 +108,8 @@ const HomePage = () => {
                                 title=""
                                 alt=""
                                 src="/assets/books.svg"/>
-                            <Typography className={classes.title} variant="h1">A Reader's favorite place</Typography>
-                            <Typography className={classes.subtitle} variant="body1" gutterBottom={true}>
+                            <Typography color="textPrimary" className={classes.title} variant="h2">A Reader's favorite place</Typography>
+                            <Typography  color="textPrimary"  className={classes.subtitle} variant="body1" gutterBottom={true}>
                                 We provide high quality online resource for reading blogs. Just sign up and start
                                 reading
                                 some
@@ -106,7 +141,39 @@ const HomePage = () => {
                 }
             </Container>
             <Container className={classes.container} style={{display: !isSignedIn ? "none" : null}}>
-                    <Blogs loading={loading}  posts={posts} />
+                <Typography className={classes.title} variant="h1" align="center" color="textPrimary">Blog</Typography>
+                <Divider variant="fullWidth" className={classes.divider}/>
+                {mobile ? (
+                    <Container>
+                        <Grid spacing={2} container={true} justify="center" alignItems="center">
+                            <Grid item={true} xs={8} md={10}>
+                                <TextField
+                                    label="Search"
+                                    placeholder="Search"
+                                    value={input}
+                                    className={classes.textField}
+                                    onChange={e => setInput(e.target.value)}
+                                    fullWidth={true}
+                                    variant="outlined"
+                                    margin="dense"/>
+
+                            </Grid>
+                            <Grid item={true} xs={4} md={2}>
+                                <Button
+                                    className={classes.button}
+                                    color="primary"
+                                    variant="contained"
+                                    disableElevation={true}
+                                    fullWidth={true}
+                                    size="medium"
+                                    onClick={handleSearchClick}>Search</Button>
+                            </Grid>
+                        </Grid>
+                        <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                    </Container>
+                ) : null}
+
+                <Blogs loading={loading} posts={posts}/>
             </Container>
         </Layout>
     )

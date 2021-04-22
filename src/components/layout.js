@@ -8,13 +8,12 @@ const Layout = ({children}) => {
         return {
             container: {
                 minHeight: '100vh',
-                background: "#53900f"
+                background: theme.palette.background.default
             }
         }
     });
 
     const classes = useStyles();
-
 
     return (
         <Box className={classes.container}>

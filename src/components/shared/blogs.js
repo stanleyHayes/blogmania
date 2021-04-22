@@ -1,5 +1,11 @@
 import React from "react";
-import {Container, Divider, Grid, LinearProgress, makeStyles, Typography} from "@material-ui/core";
+import {
+    Container,
+    Grid,
+    LinearProgress,
+    makeStyles,
+    Typography
+} from "@material-ui/core";
 import Post from "./post";
 
 const Blogs = ({posts, loading}) => {
@@ -11,9 +17,14 @@ const Blogs = ({posts, loading}) => {
                 marginBottom: 32
             },
             container: {},
-            noPostContainer:{},
+            noPostContainer: {},
             noPostText: {
                 fontWeight: "bold",
+                textTransform: "uppercase"
+            },
+            title: {
+                fontWeight: "light",
+                fontSize: 84,
                 textTransform: "uppercase"
             }
         }
@@ -21,14 +32,17 @@ const Blogs = ({posts, loading}) => {
 
     const classes = useStyles();
 
+
     return (
         <Container className={classes.container}>
-            <Typography variant="h1" align="center" color="textPrimary">Blogs</Typography>
-            <Divider variant="fullWidth" className={classes.divider}/>
             {loading ? <LinearProgress variant="query" color="primary"/> : (
                 <Grid container={true} spacing={5}>
                     {!posts.length ? (
-                        <Grid className={classes.noPostContainer} container={true} justify="center" alignItems="center">
+                        <Grid
+                            className={classes.noPostContainer}
+                            container={true}
+                            justify="center"
+                            alignItems="center">
                             <Grid item={true}>
                                 <Typography className={classes.noPostText} variant="h6">
                                     No Posts Available

@@ -15,7 +15,7 @@ const userSlice = createSlice({
         setUserData: (state, action) => {
             state.userData = action.payload
         },
-        setInput: (state, action) => {
+        setSearchInput: (state, action) => {
             state.searchInput = action.payload
         },
         setBlogData: (state, action) => {
@@ -25,7 +25,7 @@ const userSlice = createSlice({
 });
 
 export const {
-    setInput,
+    setSearchInput,
     setBlogData,
     setSignedIn,
     setUserData

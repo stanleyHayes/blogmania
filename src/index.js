@@ -4,12 +4,39 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
-import store from "../app/store";
+import store from "./app/store";
+import {createMuiTheme, ThemeProvider} from "@material-ui/core";
+
+const theme = createMuiTheme({
+    typography: {
+        fontFamily: "Quicksand, sans-serif"
+    },
+    palette: {
+        primary: {
+            main: "#1f2605"
+        },
+        secondary: {
+            main: "#53900f"
+        },
+        action: {
+            active: "#ffffff",
+            focus: "#ffffff",
+            selected: "#ffffff",
+            hover: "#ffffff"
+        },
+        background: {
+            paper: "#1f6521"
+        },
+        type: "dark"
+    }
+});
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App/>
+            <ThemeProvider theme={theme}>
+                <App/>
+            </ThemeProvider>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')

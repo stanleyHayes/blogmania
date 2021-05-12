@@ -5,8 +5,7 @@ const userSlice = createSlice({
     initialState: {
         isSignedIn: false,
         userData: null,
-        searchInput: "tech",
-        blogData: null
+        searchInput: "tech"
     },
     reducers: {
         setSignedIn: (state, action) => {
@@ -17,16 +16,12 @@ const userSlice = createSlice({
         },
         setSearchInput: (state, action) => {
             state.searchInput = action.payload
-        },
-        setBlogData: (state, action) => {
-            state.blogData = action.payload
         }
     }
 });
 
 export const {
     setSearchInput,
-    setBlogData,
     setSignedIn,
     setUserData
 } = userSlice.actions;

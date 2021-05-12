@@ -27,6 +27,9 @@ const DesktopHeader = () => {
         dispatch(setUserData(response.profileObj))
     }
 
+    const loginFail = response => {
+        console.log(response)
+    }
     const logout = () => {
         dispatch(setSignedIn(false));
         dispatch(setUserData(null))
@@ -145,7 +148,7 @@ const DesktopHeader = () => {
                                         )
                                     }}
                                     onLogoutSuccess={logout}
-                                    onFailure={logout}
+                                    onFailure={loginFail}
                                     isSignedIn={false}
                                     cookiePolicy={"single_host_origin"}
                                 />
@@ -177,7 +180,7 @@ const DesktopHeader = () => {
                                     }}
                                     onSuccess={login}
                                     onFailure={login}
-                                    isSignedIn={true}
+                                    isSignedIn={false}
                                     cookiePolicy={"single_host_origin"}
                                 />
                             </Grid>
